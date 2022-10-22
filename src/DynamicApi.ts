@@ -103,6 +103,55 @@ export default class DynamicApi {
     }
   }
 
+  public performDynamicSync(name: string, payload?: Record<string, any>): any {
+    const dynamicEntry = this.getDynamicRegistry(name)
+    const results = []
+
+    // Before hooks
+    for (let i = 0; i < dynamicEntry.beforeHooks.length; i++) this.performSync(dynamicEntry.beforeHooks[i], payload)
+
+    if (this.options.accumulate) {
+      if (dynamicEntry.default) results.push(this.performSync(dynamicEntry.default, payload))
+
+      for (let i = 0; i < dynamicEntry.implementations.length; i++) {
+        const CurrentImplementation = dynamicEntry.implementations[i]
+
+        results.push(this.performSync(CurrentImplementation, payload))
+      }
+    } else {
+      if (dynamicEntry.implementations[0]) {
+        results.push(this.performSync(dynamicEntry.implementations[0], payload))
+      } else if (dynamicEntry.default) {
+        results.push(this.performSync(dynamicEntry.default, payload))
+      } else {
+        throw new Error(`"${name}" does not implement dynamics only hooks`)
+      }
+    }
+
+    // After hooks
+    for (let i = 0; i < dynamicEntry.afterHooks.length; i++) this.performSync(dynamicEntry.afterHooks[i], payload, true, this.options.accumulate ? results : results[0])
+
+    if (this.options.accumulate) {
+      return results
+    } else {
+      return results[0]
+    }
+  }
+
+  private performSync(DynamicClass: DynamicClassLike, payload: Record<string, any>, shareResult = false, result?: any): any {
+    const instance = new DynamicClass()
+
+    if (instance.perform) {
+      if (shareResult) {
+        return instance.perform(payload, result, this)
+      } else {
+        return instance.perform(payload, this)
+      }
+    } else {
+      throw new Error(`${DynamicClass.__name} does not implements perform method`)
+    }
+  }
+
   private getDynamicRegistry(name: string): DynamicRegistry {
     const dynamicEntry = this.dynamics[name]
 

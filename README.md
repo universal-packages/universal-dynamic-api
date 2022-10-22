@@ -49,6 +49,18 @@ console.log(result)
   // > ["I did it fast", "I also did it fast"]
   ```
 
+## performDynamicSync
+
+To not waste overhead in async calls perform dynamics synchronically, they of course should implement a sync perform method.
+
+```js
+const result = dynamicApi.performDynamicSync('calculate', { fast: true })
+
+console.log(result)
+
+// > "I did it fast"
+```
+
 ## @Dynamic
 
 Dynamics are classes as a default export, decorated with `@Dynamic` decorator and implementing the method `perform`.
