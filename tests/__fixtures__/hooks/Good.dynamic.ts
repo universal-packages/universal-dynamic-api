@@ -5,11 +5,11 @@ export default class GoodDynamic {
   public static calls = []
   public static finishResolve: Function
 
-  public async perform(body: any): Promise<void> {
+  public async perform(...args: any[]): Promise<string> {
     return new Promise((resolve) => {
       GoodDynamic.finishResolve = () => {
-        GoodDynamic.calls.push(body)
-        resolve()
+        GoodDynamic.calls.push(args)
+        resolve('Good called')
       }
     })
   }

@@ -1,4 +1,4 @@
-import { DynamicHook } from '../../../../src/DynamicHook.decorator'
+import { DynamicHook } from '../../../src/DynamicHook.decorator'
 
 @DynamicHook('before', 'good')
 export default class GoodBeforeHookDynamic {

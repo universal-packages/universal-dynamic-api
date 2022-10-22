@@ -4,7 +4,7 @@ import { DynamicHook } from '../../../../src/DynamicHook.decorator'
 export default class GoodAfterHookDynamic {
   public static calls = []
 
-  public async perform(body: any): Promise<void> {
-    GoodAfterHookDynamic.calls.push(body)
+  public async perform(...args: any[]): Promise<void> {
+    GoodAfterHookDynamic.calls.push(args)
   }
 }

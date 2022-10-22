@@ -55,49 +55,61 @@ export default class DynamicApi {
   }
 
   public async performDynamic(name: string, payload?: Record<string, any>): Promise<any> {
-    const dynamicEntry = this.dynamics[name]
+    const dynamicEntry = this.getDynamicRegistry(name)
     const results = []
 
-    if (dynamicEntry) {
-      // Before hooks
-      for (let i = 0; i < dynamicEntry.beforeHooks.length; i++) await this.perform(dynamicEntry.beforeHooks[i], payload)
+    // Before hooks
+    for (let i = 0; i < dynamicEntry.beforeHooks.length; i++) await this.perform(dynamicEntry.beforeHooks[i], payload)
 
-      if (this.options.accumulate) {
-        if (dynamicEntry.default) results.push(await this.perform(dynamicEntry.default, payload))
+    if (this.options.accumulate) {
+      if (dynamicEntry.default) results.push(await this.perform(dynamicEntry.default, payload))
 
-        for (let i = 0; i < dynamicEntry.implementations.length; i++) {
-          const CurrentImplementation = dynamicEntry.implementations[i]
+      for (let i = 0; i < dynamicEntry.implementations.length; i++) {
+        const CurrentImplementation = dynamicEntry.implementations[i]
 
-          results.push(await this.perform(CurrentImplementation, payload))
-        }
-      } else {
-        if (dynamicEntry.implementations[0]) {
-          results.push(await this.perform(dynamicEntry.implementations[0], payload))
-        } else {
-          results.push(await this.perform(dynamicEntry.default, payload))
-        }
-      }
-
-      // After hooks
-      for (let i = 0; i < dynamicEntry.afterHooks.length; i++) await this.perform(dynamicEntry.afterHooks[i], payload)
-
-      if (this.options.accumulate) {
-        return results
-      } else {
-        return results[0]
+        results.push(await this.perform(CurrentImplementation, payload))
       }
     } else {
-      throw new Error(`"${name}" dynamic does not exist in this api`)
+      if (dynamicEntry.implementations[0]) {
+        results.push(await this.perform(dynamicEntry.implementations[0], payload))
+      } else if (dynamicEntry.default) {
+        results.push(await this.perform(dynamicEntry.default, payload))
+      } else {
+        throw new Error(`"${name}" does not implement dynamics only hooks`)
+      }
+    }
+
+    // After hooks
+    for (let i = 0; i < dynamicEntry.afterHooks.length; i++) await this.perform(dynamicEntry.afterHooks[i], payload, true, this.options.accumulate ? results : results[0])
+
+    if (this.options.accumulate) {
+      return results
+    } else {
+      return results[0]
     }
   }
 
-  private async perform(DynamicClass: DynamicClassLike, payload: Record<string, any>): Promise<any> {
+  private async perform(DynamicClass: DynamicClassLike, payload: Record<string, any>, shareResult = false, result?: any): Promise<any> {
     const instance = new DynamicClass()
 
     if (instance.perform) {
-      return await instance.perform(payload)
+      if (shareResult) {
+        return await instance.perform(payload, result, this)
+      } else {
+        return await instance.perform(payload, this)
+      }
     } else {
       throw new Error(`${DynamicClass.__name} does not implements perform method`)
     }
+  }
+
+  private getDynamicRegistry(name: string): DynamicRegistry {
+    const dynamicEntry = this.dynamics[name]
+
+    if (!dynamicEntry) {
+      throw new Error(`"${name}" dynamic does not exist in this api`)
+    }
+
+    return dynamicEntry
   }
 }

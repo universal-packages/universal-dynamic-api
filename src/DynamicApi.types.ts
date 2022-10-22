@@ -1,3 +1,5 @@
+import DynamicApi from './DynamicApi'
+
 export type DynamicHookPosition = 'after' | 'before'
 
 export interface DynamicApiOptions {
@@ -19,7 +21,7 @@ export interface Dynamics {
 }
 
 export interface DynamicLike {
-  perform: (payload?: Record<string, any>) => any | Promise<any>
+  perform: (payload?: Record<string, any>, forHookResultOrDynamicApi?: any | DynamicApi, dynamicApi?: DynamicApi) => any | Promise<any>
 }
 
 export interface DynamicClassLike {

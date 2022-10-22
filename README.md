@@ -68,6 +68,26 @@ export default class CalculateDynamic {
 }
 ```
 
+You can perform other dynamics inside your dynamics by accessing the second argument for the perform method where the dynamic api caller is shared.
+
+```js
+import { Dynamic } from '@universal-packages/dynamic-api'
+
+@Dynamic('calculate')
+export default class CalculateDynamic {
+  public async perform(payload, dynamicApi) {
+
+    if(payload.fast) {
+      const speed = await dynamicApi.performDynamic('calculate-speed', { fast: true })
+
+      return 'I did it fast like ' + speed + ' fast'
+    } else {
+      return 'I was slow'
+    }
+  }
+}
+```
+
 ### Default Dynamics
 
 The whole point of the dynamic API is to be extensible in all posable ways, to be dynamic if we will. When creating a dynamic API you may want to let he user override provided default dynamics, in order to let that happen we mark dynamics as default, if the user creates another dynamic with same name, then that dynamic will be performed instead of the default one.
@@ -94,10 +114,37 @@ Hooks allows the user to perform some other tasks `before` and `after` a main dy
 ```js
 import { DynamicHook } from '@universal-packages/dynamic-api'
 
-@DynamicHook('after', 'calculate') // <-- True to be default
+@DynamicHook('after', 'calculate')
 export default class AfterCalculateDynamic {
   public async perform(payload) {
     console.log('A calculation was made with:', payload)
+  }
+}
+```
+
+`after` hooks have the particularity of having access to teh result given by the main dynamic.
+
+```js
+import { DynamicHook } from '@universal-packages/dynamic-api'
+
+@DynamicHook('after', 'calculate')
+export default class AfterCalculateDynamic {
+  public async perform(payload, result) {
+    console.log('A calculation was made with:', payload, 'and with result:', result)
+  }
+}
+```
+
+The same way as with dynamics you can perform other dynamics inside your dynamics hooks by accessing the second argument in `before` hooks and the third in `after` hooks for the perform method where the dynamic api caller is shared.
+
+```js
+import { Dynamic } from '@universal-packages/dynamic-api'
+
+@DynamicHook('before', 'calculate')
+export default class CalculateDynamic {
+  public async perform(payload, dynamicApi) {
+    console.log('about to calculate with:', payload)
+    await dynamicApi.performDynamic('prepare-data')
   }
 }
 ```
