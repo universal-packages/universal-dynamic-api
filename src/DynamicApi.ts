@@ -1,7 +1,7 @@
 import { loadModules } from '@universal-packages/module-loader'
-import { DynamicApiOptions, DynamicClassLike, DynamicLike, DynamicRegistry, Dynamics } from './DynamicApi.types'
+import { DynamicApiOptions, DynamicClassLike, DynamicRegistry, Dynamics } from './DynamicApi.types'
 
-export default class DynamicApi {
+export default class DynamicApi<D extends Record<string, any>> {
   public readonly options: DynamicApiOptions
   public readonly dynamics: Dynamics = {}
 
@@ -54,8 +54,8 @@ export default class DynamicApi {
     }
   }
 
-  public async performDynamic(name: string, payload?: Record<string, any>): Promise<any> {
-    const dynamicEntry = this.getDynamicRegistry(name)
+  public async performDynamic<N extends keyof D>(name: N, payload?: D[N]['payload']): Promise<D[N]['result']> {
+    const dynamicEntry = this.getDynamicRegistry(name as string)
     const results = []
 
     // Before hooks
@@ -75,7 +75,7 @@ export default class DynamicApi {
       } else if (dynamicEntry.default) {
         results.push(await this.perform(dynamicEntry.default, payload))
       } else {
-        throw new Error(`"${name}" does not implement dynamics only hooks`)
+        throw new Error(`"${name as string}" does not implement dynamics only hooks`)
       }
     }
 
@@ -103,8 +103,8 @@ export default class DynamicApi {
     }
   }
 
-  public performDynamicSync(name: string, payload?: Record<string, any>): any {
-    const dynamicEntry = this.getDynamicRegistry(name)
+  public performDynamicSync<N extends keyof D>(name: N, payload?: D[N]['payload']): D[N]['result'] {
+    const dynamicEntry = this.getDynamicRegistry(name as string)
     const results = []
 
     // Before hooks
@@ -124,7 +124,7 @@ export default class DynamicApi {
       } else if (dynamicEntry.default) {
         results.push(this.performSync(dynamicEntry.default, payload))
       } else {
-        throw new Error(`"${name}" does not implement dynamics only hooks`)
+        throw new Error(`"${name as string}" does not implement dynamics only hooks`)
       }
     }
 

@@ -21,7 +21,7 @@ export interface Dynamics {
 }
 
 export interface DynamicLike {
-  perform: (payload?: Record<string, any>, forHookResultOrDynamicApi?: any | DynamicApi, dynamicApi?: DynamicApi) => any | Promise<any>
+  perform: (payload?: Record<string, any>, forHookResultOrDynamicApi?: any | DynamicApi<any>, dynamicApi?: DynamicApi<any>) => any | Promise<any>
 }
 
 export interface DynamicClassLike {

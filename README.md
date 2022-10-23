@@ -165,6 +165,24 @@ export default class CalculateDynamic {
 
 This library is developed in TypeScript and shipped fully typed.
 
+### Typing dynamics
+
+Since all here is dynamic `performDynamic` takes generic payloads and return generic results, if you want to type your dynamics you can always create an interface typing the payload and the result of your dynamics.
+
+```ts
+interface DynamicNames {
+  calculate: {
+    payload: { fast: boolean }
+    result: string
+  }
+}
+
+const dynamicApi = new DynamicApi<DynamicNames>({ dynamicsLocation: './src' })
+
+// Now result is string type and performDynamic will require a payload of the specific shape
+const result = dynamicApi.performDynamic('calculate', { fast: true })
+```
+
 ## Contributing
 
 The development of this library in the open on GitHub, and we are grateful to the community for contributing bugfixes and improvements. Read below to learn how you can take part in improving this library.
