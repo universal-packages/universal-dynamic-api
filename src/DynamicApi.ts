@@ -1,11 +1,13 @@
 import { loadModules } from '@universal-packages/module-loader'
+import { EventEmitter } from 'stream'
 import { DynamicApiOptions, DynamicClassLike, DynamicRegistry, Dynamics } from './DynamicApi.types'
 
-export default class DynamicApi<D extends Record<string, any>> {
+export default class DynamicApi<D extends Record<string, any>> extends EventEmitter {
   public readonly options: DynamicApiOptions
   public readonly dynamics: Dynamics = {}
 
   public constructor(options: DynamicApiOptions) {
+    super()
     this.options = { ...options }
   }
 

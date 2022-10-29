@@ -161,6 +161,26 @@ export default class CalculateDynamic {
 }
 ```
 
+## Even Emitter
+
+DynamicApi is an emitter, it does not emit anything by itself but you can use it to communicate to other parts of your app what is going on in your dynamics.
+
+```js
+import { Dynamic } from '@universal-packages/dynamic-api'
+
+@Dynamic('calculate')
+export default class CalculateDynamic {
+  public async perform(payload, dynamicApi) {
+    dynamicApi.emit('event', 'A calculation was done')
+    if(payload.fast) {
+      return 'I did it fast'
+    } else {
+      return 'I was slow'
+    }
+  }
+}
+```
+
 ## Typescript
 
 This library is developed in TypeScript and shipped fully typed.
