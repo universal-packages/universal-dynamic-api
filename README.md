@@ -203,6 +203,16 @@ const dynamicApi = new DynamicApi<DynamicNames>({ dynamicsLocation: './src' })
 const result = dynamicApi.performDynamic('calculate', { fast: true })
 ```
 
+Use your template names in the hooks as well
+
+```ts
+import { Dynamic } from '@universal-packages/dynamic-api'
+import { DynamicNames } from './types'
+
+@Dynamic<DynamicNames>('calculate')
+export default class CalculateDynamic {}
+```
+
 ## Contributing
 
 The development of this library in the open on GitHub, and we are grateful to the community for contributing bugfixes and improvements. Read below to learn how you can take part in improving this library.
