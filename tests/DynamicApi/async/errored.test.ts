@@ -11,6 +11,6 @@ describe('DynamicApi', (): void => {
       error = err
     }
 
-    expect(error).toEqual('Error')
+    expect(error.message).toEqual('Error')
   })
 })

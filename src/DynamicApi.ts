@@ -18,7 +18,13 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
 
     for (let i = 0; i < finalModules.length; i++) {
       const currentModule = finalModules[i]
-      if (currentModule.error) throw currentModule.error
+      if (currentModule.error) {
+        if (currentModule.error instanceof Error) {
+          throw currentModule.error
+        } else {
+          throw new Error(currentModule.error as any)
+        }
+      }
     }
 
     for (let i = 0; i < finalModules.length; i++) {
