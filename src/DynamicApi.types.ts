@@ -1,9 +1,12 @@
 import DynamicApi from './DynamicApi'
 
 export type DynamicHookPosition = 'after' | 'before'
+export type DebugLog = DebugEntry[]
 
 export interface DynamicApiOptions {
+  apiName?: string
   accumulate?: boolean
+  debug?: boolean
   dynamicsLocation: string
   namespace?: string
 }
@@ -29,4 +32,14 @@ export interface DynamicClassLike {
   __defaultDynamic: boolean
   __lifeCycle: DynamicHookPosition
   new (...args: any[]): DynamicLike
+}
+
+export interface DebugEntry {
+  name: string
+  payload: Record<string, any>
+  results: any[]
+  hooks: {
+    after: DynamicClassLike[]
+    before: DynamicClassLike[]
+  }
 }

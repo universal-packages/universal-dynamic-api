@@ -32,6 +32,15 @@ console.log(result)
 
 ### Options
 
+- **`debug`** `Boolean`
+  If true the instance of this dynamic api will keep track of what is being performed into a log.
+
+  ```js
+  console.log(dynamicApi.debugLog)
+
+  // > [{ name: 'calculate', payload: { fast: true }, results: ['I did it fast'], hooks: { after: [AfterCalculateDynamic], before: [BeforeCalculateDynamic] } }]
+  ```
+
 - **`dynamicsLocation`** `Required` `String`
   Where to look up for dynamics to load.
 - **`namespace`** `String`
@@ -134,7 +143,7 @@ export default class AfterCalculateDynamic {
 }
 ```
 
-`after` hooks have the particularity of having access to teh result given by the main dynamic.
+`after` hooks have the particularity of having access to the result given by the main dynamic.
 
 ```js
 import { DynamicHook } from '@universal-packages/dynamic-api'
@@ -153,7 +162,7 @@ The same way as with dynamics you can perform other dynamics inside your dynamic
 import { Dynamic } from '@universal-packages/dynamic-api'
 
 @DynamicHook('before', 'calculate')
-export default class CalculateDynamic {
+export default class BeforeCalculateDynamic {
   public async perform(payload, dynamicApi) {
     console.log('about to calculate with:', payload)
     await dynamicApi.performDynamic('prepare-data')

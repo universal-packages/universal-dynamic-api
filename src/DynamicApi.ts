@@ -1,14 +1,19 @@
 import { loadModules } from '@universal-packages/module-loader'
 import { EventEmitter } from 'stream'
-import { DynamicApiOptions, DynamicClassLike, DynamicRegistry, Dynamics } from './DynamicApi.types'
+import { DebugEntry, DebugLog, DynamicApiOptions, DynamicClassLike, DynamicRegistry, Dynamics } from './DynamicApi.types'
 
 export default class DynamicApi<D extends Record<string, any>> extends EventEmitter {
   public readonly options: DynamicApiOptions
   public readonly dynamics: Dynamics = {}
+  public readonly debugLog: DebugLog = []
 
   public constructor(options: DynamicApiOptions) {
     super()
     this.options = { ...options }
+
+    if (this.options.debug && process.env['NODE_ENV'] !== 'test' && process.env['NODE_ENV'] !== 'development') {
+      this.emit('warning', { message: `dynamic api (${this.options.apiName || this.constructor.name || 'unnamed'}) debug mode is enabled` })
+    }
   }
 
   public async loadDynamics(): Promise<void> {
@@ -66,8 +71,16 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
     const dynamicEntry = this.getDynamicRegistry(name as string)
     const results = []
 
+    //////// Debug
+    const debugEntry: DebugEntry = this.options.debug ? { name: name as any, payload, results: [], hooks: { after: [], before: [] } } : undefined
+
     // Before hooks
-    for (let i = 0; i < dynamicEntry.beforeHooks.length; i++) await this.perform(dynamicEntry.beforeHooks[i], payload)
+    for (let i = 0; i < dynamicEntry.beforeHooks.length; i++) {
+      //////// Debug
+      if (this.options.debug) debugEntry.hooks.before.push(dynamicEntry.beforeHooks[i])
+
+      await this.perform(dynamicEntry.beforeHooks[i], payload)
+    }
 
     if (this.options.accumulate) {
       if (dynamicEntry.default) results.push(await this.perform(dynamicEntry.default, payload))
@@ -87,8 +100,18 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
       }
     }
 
+    //////// Debug
+    if (this.options.debug) debugEntry.results = results
+
     // After hooks
-    for (let i = 0; i < dynamicEntry.afterHooks.length; i++) await this.perform(dynamicEntry.afterHooks[i], payload, true, this.options.accumulate ? results : results[0])
+    for (let i = 0; i < dynamicEntry.afterHooks.length; i++) {
+      //////// Debug
+      if (this.options.debug) debugEntry.hooks.after.push(dynamicEntry.afterHooks[i])
+
+      await this.perform(dynamicEntry.afterHooks[i], payload, true, this.options.accumulate ? results : results[0])
+    }
+
+    if (this.options.debug) this.debugLog.push(debugEntry)
 
     if (this.options.accumulate) {
       return results
@@ -115,8 +138,16 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
     const dynamicEntry = this.getDynamicRegistry(name as string)
     const results = []
 
+    //////// Debug
+    const debugEntry: DebugEntry = this.options.debug ? { name: name as any, payload, results: [], hooks: { after: [], before: [] } } : undefined
+
     // Before hooks
-    for (let i = 0; i < dynamicEntry.beforeHooks.length; i++) this.performSync(dynamicEntry.beforeHooks[i], payload)
+    for (let i = 0; i < dynamicEntry.beforeHooks.length; i++) {
+      //////// Debug
+      if (this.options.debug) debugEntry.hooks.before.push(dynamicEntry.beforeHooks[i])
+
+      this.performSync(dynamicEntry.beforeHooks[i], payload)
+    }
 
     if (this.options.accumulate) {
       if (dynamicEntry.default) results.push(this.performSync(dynamicEntry.default, payload))
@@ -136,8 +167,18 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
       }
     }
 
+    //////// Debug
+    if (this.options.debug) debugEntry.results = results
+
     // After hooks
-    for (let i = 0; i < dynamicEntry.afterHooks.length; i++) this.performSync(dynamicEntry.afterHooks[i], payload, true, this.options.accumulate ? results : results[0])
+    for (let i = 0; i < dynamicEntry.afterHooks.length; i++) {
+      //////// Debug
+      if (this.options.debug) debugEntry.hooks.after.push(dynamicEntry.afterHooks[i])
+
+      this.performSync(dynamicEntry.afterHooks[i], payload, true, this.options.accumulate ? results : results[0])
+    }
+
+    if (this.options.debug) this.debugLog.push(debugEntry)
 
     if (this.options.accumulate) {
       return results
