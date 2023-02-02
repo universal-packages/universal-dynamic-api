@@ -58,19 +58,18 @@ console.log(result)
   // > ["I did it fast", "I also did it fast"]
   ```
 
-## performDynamicSync
+### Instance methods
+
+#### **`performDynamic(name: string, payload: Object)`**
+
+Performs a dynamic in an asynchronous way.
+
+#### **`performDynamicSync(name: string, payload: Object)`**
 
 To not waste overhead in async calls perform dynamics synchronically, they of course should implement a sync perform method.
 
-```js
-const result = dynamicApi.performDynamicSync('calculate', { fast: true })
-
-console.log(result)
-
-// > "I did it fast"
-```
-
-## @Dynamic
+## Hooks
+#### **`@Dynamic(name: string, [default: boolean])`**
 
 Dynamics are classes as a default export, decorated with `@Dynamic` decorator and implementing the method `perform`.
 
@@ -109,8 +108,6 @@ export default class CalculateDynamic {
 }
 ```
 
-### Default Dynamics
-
 The whole point of the dynamic API is to be extensible in all posable ways, to be dynamic if we will. When creating a dynamic API you may want to let he user override provided default dynamics, in order to let that happen we mark dynamics as default, if the user creates another dynamic with same name, then that dynamic will be performed instead of the default one.
 
 ```js
@@ -128,7 +125,7 @@ export default class CalculateDynamic {
 }
 ```
 
-## @DynamicHook
+#### **`@DynamicHook(lifeCycle: before | after, name: string)`**
 
 Hooks allows the user to perform some other tasks `before` and `after` a main dynamic is performed, for example you need to calculate something in a dynamic but need to also log that the calculation was done, instead of overriding the dynamic for your specific case you create a hook to run after the dynamic.
 
@@ -170,7 +167,7 @@ export default class BeforeCalculateDynamic {
 }
 ```
 
-## Even Emitter
+## Events
 
 DynamicApi is an emitter, it does not emit anything by itself but you can use it to communicate to other parts of your app what is going on in your dynamics.
 

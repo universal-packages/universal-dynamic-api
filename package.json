@@ -14,7 +14,7 @@
     "test:clear": "jest --clearCache"
   },
   "dependencies": {
-    "@universal-packages/module-loader": "^1.0.0"
+    "@universal-packages/module-loader": "^1.0.1"
   },
   "devDependencies": {
     "@types/jest": "^28.1.0",
