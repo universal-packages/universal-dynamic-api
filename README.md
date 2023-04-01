@@ -68,7 +68,7 @@ Performs a dynamic in an asynchronous way.
 
 To not waste overhead in async calls perform dynamics synchronically, they of course should implement a sync perform method.
 
-## Hooks
+## Decorators
 #### **`@Dynamic(name: string, [default: boolean])`**
 
 Dynamics are classes as a default export, decorated with `@Dynamic` decorator and implementing the method `perform`.
