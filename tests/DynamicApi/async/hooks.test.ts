@@ -1,11 +1,11 @@
 import { DynamicApi } from '../../../src'
-import BadAfterHookDynamic from '../../__fixtures__/async/hooks/after/BadAfterHook.dynamic'
-import GoodAfterHookDynamic from '../../__fixtures__/async/hooks/after/GoodAfterHook.dynamic'
-import GoodAfterHookDynamic2 from '../../__fixtures__/async/hooks/after/GoodAfterHook2.dynamic'
-import BadBeforeHookDynamic from '../../__fixtures__/async/hooks/before/BadBeforeHook.dynamic'
-import GoodBeforeHookDynamic from '../../__fixtures__/async/hooks/before/GoodBeforeHook.dynamic'
-import GoodBeforeHookDynamic2 from '../../__fixtures__/async/hooks/before/GoodBeforeHook2.dynamic'
 import GoodDynamic from '../../__fixtures__/async/hooks/Good.dynamic'
+import BadAfterHookDynamic from '../../__fixtures__/async/hooks/after/BadAfterHook.dynamic'
+import GoodAfterHookDynamic2 from '../../__fixtures__/async/hooks/after/GoodAfterHook2.dynamic'
+import GoodAfterHookDynamic from '../../__fixtures__/async/hooks/after/GoodAfterHook.dynamic'
+import BadBeforeHookDynamic from '../../__fixtures__/async/hooks/before/BadBeforeHook.dynamic'
+import GoodBeforeHookDynamic2 from '../../__fixtures__/async/hooks/before/GoodBeforeHook2.dynamic'
+import GoodBeforeHookDynamic from '../../__fixtures__/async/hooks/before/GoodBeforeHook.dynamic'
 
 beforeEach((): void => {
   GoodDynamic.calls = []

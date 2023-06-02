@@ -1,5 +1,6 @@
 import { loadModules } from '@universal-packages/module-loader'
 import { EventEmitter } from 'stream'
+
 import { DebugEntry, DebugLog, DynamicApiOptions, DynamicClassLike, DynamicRegistry, Dynamics } from './DynamicApi.types'
 
 export default class DynamicApi<D extends Record<string, any>> extends EventEmitter {
