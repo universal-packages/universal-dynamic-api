@@ -4,9 +4,10 @@ import { EventEmitter } from 'stream'
 import { DebugEntry, DebugLog, DynamicApiOptions, DynamicClassLike, DynamicRegistry, Dynamics } from './DynamicApi.types'
 
 export default class DynamicApi<D extends Record<string, any>> extends EventEmitter {
+  public static readonly debugLog: DebugLog = []
+
   public readonly options: DynamicApiOptions
   public readonly dynamics: Dynamics = {}
-  public readonly debugLog: DebugLog = []
 
   public constructor(options: DynamicApiOptions) {
     super()
@@ -112,7 +113,7 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
       await this.perform(dynamicEntry.afterHooks[i], payload, true, this.options.accumulate ? results : results[0])
     }
 
-    if (this.options.debug) this.debugLog.push(debugEntry)
+    if (this.options.debug) this.constructor['debugLog'].push(debugEntry)
 
     if (this.options.accumulate) {
       return results
@@ -179,7 +180,7 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
       this.performSync(dynamicEntry.afterHooks[i], payload, true, this.options.accumulate ? results : results[0])
     }
 
-    if (this.options.debug) this.debugLog.push(debugEntry)
+    if (this.options.debug) this.constructor['debugLog'].push(debugEntry)
 
     if (this.options.accumulate) {
       return results

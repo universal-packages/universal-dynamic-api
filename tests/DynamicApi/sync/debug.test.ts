@@ -2,15 +2,15 @@ import { DynamicApi } from '../../../src'
 
 describe('DynamicApi', (): void => {
   it('Keeps track of calls if debug is enabled', async (): Promise<void> => {
-    const dynamicApi = new DynamicApi({ debug: true, dynamicsLocation: './tests/__fixtures__/async/all-good' })
+    const dynamicApi = new DynamicApi({ debug: true, dynamicsLocation: './tests/__fixtures__/sync/all-good' })
 
     await dynamicApi.loadDynamics()
 
-    await dynamicApi.performDynamic('good', { call: 1 })
-    await dynamicApi.performDynamic('good', { call: 2, good: true })
+    await dynamicApi.performDynamicSync('good', { call: 1 })
+    await dynamicApi.performDynamicSync('good', { call: 2, good: true })
 
-    await dynamicApi.performDynamic('excellent', { call: 1 })
-    await dynamicApi.performDynamic('excellent', { call: 2, excellent: true })
+    await dynamicApi.performDynamicSync('excellent', { call: 1 })
+    await dynamicApi.performDynamicSync('excellent', { call: 2, excellent: true })
 
     expect(DynamicApi.debugLog).toEqual([
       {
@@ -40,17 +40,17 @@ describe('DynamicApi', (): void => {
     ])
   })
 
-  it('Does not Keep track of calls if debug is disabled', async (): Promise<void> => {
+  it('Does not keep track of calls if debug is disabled', async (): Promise<void> => {
     DynamicApi.debugLog.length = 0
-    const dynamicApi = new DynamicApi({ debug: false, dynamicsLocation: './tests/__fixtures__/async/all-good' })
+    const dynamicApi = new DynamicApi({ debug: false, dynamicsLocation: './tests/__fixtures__/sync/all-good' })
 
     await dynamicApi.loadDynamics()
 
-    await dynamicApi.performDynamic('good', { call: 1 })
-    await dynamicApi.performDynamic('good', { call: 2, good: true })
+    await dynamicApi.performDynamicSync('good', { call: 1 })
+    await dynamicApi.performDynamicSync('good', { call: 2, good: true })
 
-    await dynamicApi.performDynamic('excellent', { call: 1 })
-    await dynamicApi.performDynamic('excellent', { call: 2, excellent: true })
+    await dynamicApi.performDynamicSync('excellent', { call: 1 })
+    await dynamicApi.performDynamicSync('excellent', { call: 2, excellent: true })
 
     expect(DynamicApi.debugLog).toEqual([])
   })
