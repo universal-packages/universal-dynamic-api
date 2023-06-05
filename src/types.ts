@@ -31,6 +31,7 @@ export interface DynamicClassLike {
   __name: string
   __defaultDynamic: boolean
   __lifeCycle: DynamicHookPosition
+  __api: typeof DynamicApi
   new (...args: any[]): DynamicLike
 }
 

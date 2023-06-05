@@ -1,4 +1,5 @@
 import { DynamicApi } from '../../../src'
+import GoodDynamic from '../../__fixtures__/async/all-good/Good.dynamic'
 
 describe('DynamicApi', (): void => {
   it('Keeps track of calls if debug is enabled', async (): Promise<void> => {
@@ -11,6 +12,8 @@ describe('DynamicApi', (): void => {
 
     await dynamicApi.performDynamic('excellent', { call: 1 })
     await dynamicApi.performDynamic('excellent', { call: 2, excellent: true })
+
+    expect(GoodDynamic['__api']).toEqual(DynamicApi)
 
     expect(DynamicApi.debugLog).toEqual([
       {

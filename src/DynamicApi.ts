@@ -1,7 +1,7 @@
 import { loadModules } from '@universal-packages/module-loader'
 import { EventEmitter } from 'stream'
 
-import { DebugEntry, DebugLog, DynamicApiOptions, DynamicClassLike, DynamicRegistry, Dynamics } from './DynamicApi.types'
+import { DebugEntry, DebugLog, DynamicApiOptions, DynamicClassLike, DynamicRegistry, Dynamics } from './types'
 
 export default class DynamicApi<D extends Record<string, any>> extends EventEmitter {
   public static readonly debugLog: DebugLog = []
@@ -40,6 +40,8 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
 
       if (DynamicClass) {
         if (DynamicClass.__name) {
+          DynamicClass.__api = this.constructor as typeof DynamicApi
+
           const dynamicEntry: DynamicRegistry = this.dynamics[DynamicClass.__name] || { afterHooks: [], beforeHooks: [], implementations: [], name: DynamicClass.__name }
 
           if (DynamicClass.__defaultDynamic) {

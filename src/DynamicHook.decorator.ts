@@ -1,4 +1,4 @@
-import { DynamicHookPosition } from './DynamicApi.types'
+import { DynamicHookPosition } from './types'
 
 export function DynamicHook<D = Record<string, any>>(lifeCycle: DynamicHookPosition, name: keyof D) {
   return (target: any): void => {
