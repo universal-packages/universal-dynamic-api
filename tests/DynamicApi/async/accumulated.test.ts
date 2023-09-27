@@ -2,7 +2,7 @@ import { DynamicApi } from '../../../src'
 import GoodDynamic2 from '../../__fixtures__/async/accumulated/Good2.dynamic'
 import GoodDynamic from '../../__fixtures__/async/accumulated/Good.dynamic'
 
-describe('DynamicApi', (): void => {
+describe(DynamicApi, (): void => {
   it('If configured it calls all dynamics with the same name and return all the results', async (): Promise<void> => {
     const dynamicApi = new DynamicApi({ dynamicsLocation: './tests/__fixtures__/async/accumulated', accumulate: true })
 

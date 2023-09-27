@@ -1,7 +1,7 @@
 import { DynamicApi } from '../../../src'
 import GoodDynamic from '../../__fixtures__/async/all-good/Good.dynamic'
 
-describe('DynamicApi', (): void => {
+describe(DynamicApi, (): void => {
   it('Keeps track of calls if debug is enabled', async (): Promise<void> => {
     const dynamicApi = new DynamicApi({ debug: true, dynamicsLocation: './tests/__fixtures__/async/all-good' })
 

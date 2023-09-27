@@ -16,7 +16,7 @@ beforeEach((): void => {
   GoodBeforeHookDynamic2.calls = []
 })
 
-describe('DynamicApi', (): void => {
+describe(DynamicApi, (): void => {
   it('Load hooks and perform them by position', async (): Promise<void> => {
     const dynamicApi = new DynamicApi({ dynamicsLocation: './tests/__fixtures__/async/hooks' })
 

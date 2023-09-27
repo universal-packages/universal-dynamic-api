@@ -1,7 +1,7 @@
 import { DynamicApi } from '../../../src'
 import ExcellentCoolDynamic from '../../__fixtures__/async/namespaced/Excellent.cool-dynamic'
 
-describe('DynamicApi', (): void => {
+describe(DynamicApi, (): void => {
   it('Load dynamics for a certain namespace', async (): Promise<void> => {
     const dynamicApi = new DynamicApi({ dynamicsLocation: './tests/__fixtures__/async/namespaced', namespace: 'cool' })
 

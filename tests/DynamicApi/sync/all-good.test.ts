@@ -2,7 +2,7 @@ import { DynamicApi } from '../../../src'
 import ExcellentDynamic from '../../__fixtures__/sync/all-good/Excellent.dynamic'
 import GoodDynamic from '../../__fixtures__/sync/all-good/Good.dynamic'
 
-describe('DynamicApi', (): void => {
+describe(DynamicApi, (): void => {
   it('Load dynamics and let call them', async (): Promise<void> => {
     const dynamicApi = new DynamicApi({ dynamicsLocation: './tests/__fixtures__/sync/all-good' })
 

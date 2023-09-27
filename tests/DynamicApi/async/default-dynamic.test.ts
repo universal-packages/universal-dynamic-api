@@ -3,7 +3,7 @@ import DefaultExcellentDynamic from '../../__fixtures__/async/default-dynamic/De
 import DefaultGoodDynamic from '../../__fixtures__/async/default-dynamic/DefaultGood.dynamic'
 import ExcellentDynamic from '../../__fixtures__/async/default-dynamic/Excellent.dynamic'
 
-describe('DynamicApi', (): void => {
+describe(DynamicApi, (): void => {
   it('perform dynamics by their default or by their first implementation even with default', async (): Promise<void> => {
     const dynamicApi = new DynamicApi({ dynamicsLocation: './tests/__fixtures__/async/default-dynamic' })
 
