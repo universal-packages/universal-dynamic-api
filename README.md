@@ -41,7 +41,7 @@ console.log(result)
   // > [{ name: 'calculate', payload: { fast: true }, results: ['I did it fast'], hooks: { after: [AfterCalculateDynamic], before: [BeforeCalculateDynamic] } }]
   ```
 
-- **`dynamicsLocation`** `Required` `String` `default: ./src`
+- **`dynamicsLocation`** `Required` `String` `default: './src'`
   Where to look up for dynamics to load.
 - **`namespace`** `String`
   When given the prefix of the file extension will be a mix of the provided namespace and the key word `dynamic`, ex: when name space is `auth` the files with the pattern `file.auth-dynamic.js|ts` will be loaded.
