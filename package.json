@@ -22,7 +22,7 @@
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/jest": "^29.5.4",
     "@types/node": "^17.0.39",
-    "@universal-packages/maintenance": "^1.1.0",
+    "@universal-packages/maintenance": "^1.1.1",
     "jest": "^29.6.4",
     "jest-circus": "^29.6.4",
     "prettier": "^2.8.7",
