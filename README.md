@@ -41,7 +41,7 @@ console.log(result)
   // > [{ name: 'calculate', payload: { fast: true }, results: ['I did it fast'], hooks: { after: [AfterCalculateDynamic], before: [BeforeCalculateDynamic] } }]
   ```
 
-- **`dynamicsLocation`** `Required` `String`
+- **`dynamicsLocation`** `Required` `String` `default: ./src`
   Where to look up for dynamics to load.
 - **`namespace`** `String`
   When given the prefix of the file extension will be a mix of the provided namespace and the key word `dynamic`, ex: when name space is `auth` the files with the pattern `file.auth-dynamic.js|ts` will be loaded.
@@ -69,6 +69,7 @@ Performs a dynamic in an asynchronous way.
 To not waste overhead in async calls perform dynamics synchronically, they of course should implement a sync perform method.
 
 ## Decorators
+
 #### **`@Dynamic(name: string, [default: boolean])`**
 
 Dynamics are classes as a default export, decorated with `@Dynamic` decorator and implementing the method `perform`.
@@ -213,6 +214,7 @@ Use your template names in the hooks as well
 
 ```ts
 import { Dynamic } from '@universal-packages/dynamic-api'
+
 import { DynamicNames } from './types'
 
 @Dynamic<DynamicNames>('calculate')
