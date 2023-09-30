@@ -14,7 +14,10 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
     this.options = { debug: process.env['NODE_ENV'] === 'test', dynamicsLocation: './src', ...options }
 
     if (this.options.debug && process.env['NODE_ENV'] !== 'test' && process.env['NODE_ENV'] !== 'development') {
-      this.emit('warning', { message: `dynamic api (${this.options.apiName || this.constructor.name || 'unnamed'}) debug mode is enabled` })
+      const message = `dynamic api (${this.options.apiName || this.constructor.name || 'unnamed'}) debug mode is enabled`
+
+      this.emit('*', { event: 'warning', payload: { message } })
+      this.emit('warning', { event: 'warning', payload: { message } })
     }
   }
 
