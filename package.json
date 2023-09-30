@@ -1,6 +1,6 @@
 {
   "name": "@universal-packages/dynamic-api",
-  "version": "1.6.5",
+  "version": "1.7.0",
   "description": "Dynamic decoupling-adapting system",
   "author": "David De Anda <david@universal-packages.com> (https://github.com/universal-packages)",
   "license": "MIT",
