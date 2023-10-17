@@ -19,7 +19,7 @@
     "@universal-packages/module-loader": "^1.0.1"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
+    "@trivago/prettier-plugin-sort-imports": "^1.4.4",
     "@types/jest": "^29.5.5",
     "@types/node": "^18.11.9",
     "@universal-packages/maintenance": "^1.2.2",
