@@ -1,5 +1,5 @@
+import { EventEmitter } from '@universal-packages/event-emitter'
 import { loadModules } from '@universal-packages/module-loader'
-import { EventEmitter } from 'stream'
 
 import { DebugEntry, DebugLog, DynamicApiOptions, DynamicClassLike, DynamicRegistry, Dynamics } from './types'
 
@@ -16,8 +16,7 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
     if (this.options.debug && process.env['NODE_ENV'] !== 'test' && process.env['NODE_ENV'] !== 'development') {
       const message = `dynamic api (${this.options.apiName || this.constructor.name || 'unnamed'}) debug mode is enabled`
 
-      this.emit('*', { event: 'warning', payload: { message } })
-      this.emit('warning', { event: 'warning', payload: { message } })
+      this.emit('warning', { payload: { message } })
     }
   }
 
