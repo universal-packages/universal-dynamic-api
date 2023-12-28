@@ -16,7 +16,7 @@
     "update-dependents": "umaintenance update-dependents"
   },
   "dependencies": {
-    "@universal-packages/event-emitter": "^1.1.1",
+    "@universal-packages/event-emitter": "^1.1.2",
     "@universal-packages/module-loader": "^1.0.1"
   },
   "devDependencies": {
