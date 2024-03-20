@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@universal-packages/event-emitter": "^1.1.2",
-    "@universal-packages/module-loader": "^1.0.4"
+    "@universal-packages/module-loader": "^1.0.5"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
