@@ -12,8 +12,7 @@
     "test": "jest --watch",
     "test:full": "jest --coverage --verbose",
     "test:clear": "jest --clearCache",
-    "format": "prettier --write \"./{src,tests}/**/*.{ts,tsx,js,jsx,json}\"",
-    "update-dependents": "umaintenance update-dependents"
+    "format": "prettier --write \"./{src,tests}/**/*.{ts,tsx,js,jsx,json}\""
   },
   "dependencies": {
     "@universal-packages/event-emitter": "^1.1.2",
