@@ -16,8 +16,8 @@
     "update-universal-dependencies": "umaintenance update-universal-dependencies"
   },
   "dependencies": {
-    "@universal-packages/event-emitter": "^1.1.2",
-    "@universal-packages/module-loader": "^1.0.5"
+    "@universal-packages/event-emitter": "^1.1.3",
+    "@universal-packages/module-loader": "^1.0.6"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
