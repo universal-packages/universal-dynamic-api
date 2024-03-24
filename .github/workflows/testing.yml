@@ -20,7 +20,7 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
       - run: npm install
-      - run: npm run test:full
+      - run: npm run test:coverage
       - run: npm run build
 
       - uses: codecov/codecov-action@v4
