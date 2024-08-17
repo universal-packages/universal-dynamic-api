@@ -119,7 +119,7 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
 
     if (this.options.debug) this.constructor['debugLog'].push(debugEntry)
 
-    if (this.options.accumulate) {
+    if (results.length > 1) {
       return results
     } else {
       return results[0]

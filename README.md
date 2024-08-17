@@ -47,7 +47,7 @@ console.log(result)
   When given the prefix of the file extension will be a mix of the provided namespace and the key word `dynamic`, ex: when name space is `auth` the files with the pattern `file.auth-dynamic.js|ts` will be loaded.
   If no namespace is provided the just files with the prefix `dynamic` will be loaded.
 - **`accumulate`** `Boolean`
-  By default only the first dynamic with a given name will be performed and the retuning valued bt it will be returned to the user.
+  By default only the first dynamic with a given name will be performed and the retuning value will be returned to the user.
   When `accumulate` is true all dynamics with the same name will be performed and all the results will be accumulated in an array and returned to the user.
 
   ```js
@@ -79,8 +79,8 @@ import { Dynamic } from '@universal-packages/dynamic-api'
 
 @Dynamic('calculate')
 export default class CalculateDynamic {
-  public async perform(payload) {
-    if(payload.fast) {
+  async perform(payload) {
+    if (payload.fast) {
       return 'I did it fast'
     } else {
       return 'I was slow'
@@ -96,9 +96,8 @@ import { Dynamic } from '@universal-packages/dynamic-api'
 
 @Dynamic('calculate')
 export default class CalculateDynamic {
-  public async perform(payload, dynamicApi) {
-
-    if(payload.fast) {
+  async perform(payload, dynamicApi) {
+    if (payload.fast) {
       const speed = await dynamicApi.performDynamic('calculate-speed', { fast: true })
 
       return 'I did it fast like ' + speed + ' fast'
@@ -116,8 +115,8 @@ import { Dynamic } from '@universal-packages/dynamic-api'
 
 @Dynamic('calculate', true) // <-- True to be default
 export default class CalculateDynamic {
-  public async perform(payload) {
-    if(payload.fast) {
+  async perform(payload) {
+    if (payload.fast) {
       return 'I did it fast'
     } else {
       return 'I was slow'
@@ -135,7 +134,7 @@ import { DynamicHook } from '@universal-packages/dynamic-api'
 
 @DynamicHook('after', 'calculate')
 export default class AfterCalculateDynamic {
-  public async perform(payload) {
+  async perform(payload) {
     console.log('A calculation was made with:', payload)
   }
 }
@@ -148,7 +147,7 @@ import { DynamicHook } from '@universal-packages/dynamic-api'
 
 @DynamicHook('after', 'calculate')
 export default class AfterCalculateDynamic {
-  public async perform(payload, result) {
+  async perform(payload, result) {
     console.log('A calculation was made with:', payload, 'and with result:', result)
   }
 }
@@ -161,7 +160,7 @@ import { Dynamic } from '@universal-packages/dynamic-api'
 
 @DynamicHook('before', 'calculate')
 export default class BeforeCalculateDynamic {
-  public async perform(payload, dynamicApi) {
+  async perform(payload, dynamicApi) {
     console.log('about to calculate with:', payload)
     await dynamicApi.performDynamic('prepare-data')
   }
@@ -177,9 +176,9 @@ import { Dynamic } from '@universal-packages/dynamic-api'
 
 @Dynamic('calculate')
 export default class CalculateDynamic {
-  public async perform(payload, dynamicApi) {
+  async perform(payload, dynamicApi) {
     dynamicApi.emit('event', 'A calculation was done')
-    if(payload.fast) {
+    if (payload.fast) {
       return 'I did it fast'
     } else {
       return 'I was slow'
