@@ -12,9 +12,9 @@ export interface DynamicApiOptions {
   namespace?: string
 }
 
-export interface DynamicModule {
+export interface DynamicModule<O = Record<string, any>> {
   enabled: boolean
-  options?: Record<string, any>
+  options?: O
 }
 
 export interface DynamicRegistry {
