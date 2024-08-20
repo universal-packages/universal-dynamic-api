@@ -8,12 +8,11 @@ export interface DynamicApiOptions {
   accumulate?: boolean
   debug?: boolean
   dynamicsLocation: string
-  modules?: DynamicModule[]
+  modules?: Record<string, DynamicModule>
   namespace?: string
 }
 
 export interface DynamicModule {
-  name: string
   enabled: boolean
   options?: Record<string, any>
 }

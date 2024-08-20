@@ -58,7 +58,7 @@ console.log(result)
   // > ["I did it fast", "I also did it fast"]
   ```
 
-  -- **`modules`** `Array`
+  -- **`modules`** `Map`
   When decorating dynamics you can mark them as part of a module, you need to enable modules explicitly in the dynamic api.
 
   ```js
@@ -73,7 +73,7 @@ console.log(result)
   ```
 
   ```js
-  const dynamicApi = new DynamicApi({ modules: [{ name: 'sub-calculations', enabled: true }] })
+  const dynamicApi = new DynamicApi({ modules: { 'sub-calculations': { enabled: true } } })
   const result = await dynamicApi.performDynamic('extra')
 
   console.log(result)

@@ -11,7 +11,7 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
 
   public constructor(options: DynamicApiOptions) {
     super()
-    this.options = { debug: process.env['NODE_ENV'] === 'test', dynamicsLocation: './src', modules: [], ...options }
+    this.options = { debug: process.env['NODE_ENV'] === 'test', dynamicsLocation: './src', modules: {}, ...options }
 
     if (this.options.debug && process.env['NODE_ENV'] !== 'test' && process.env['NODE_ENV'] !== 'development') {
       const message = `dynamic api (${this.options.apiName || this.constructor.name || 'unnamed'}) debug mode is enabled`
@@ -43,7 +43,7 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
 
       if (DynamicClass) {
         if (DynamicClass.__module) {
-          const dynamicModuleEntry = this.options.modules.find((module) => module.name === DynamicClass.__module)
+          const dynamicModuleEntry = this.options.modules[DynamicClass.__module]
 
           // Skip if module is not enabled
           if (!dynamicModuleEntry) continue

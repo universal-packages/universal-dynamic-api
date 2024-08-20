@@ -25,7 +25,7 @@ describe(DynamicApi, (): void => {
   })
 
   it('Load dynamic modules only if they are enabled explicitly', async (): Promise<void> => {
-    const dynamicApi = new DynamicApi({ dynamicsLocation: './tests/__fixtures__/async/modules', modules: [{ name: 'good-module', enabled: true }] })
+    const dynamicApi = new DynamicApi({ dynamicsLocation: './tests/__fixtures__/async/modules', modules: { 'good-module': { enabled: true } } })
 
     await dynamicApi.loadDynamics()
 
