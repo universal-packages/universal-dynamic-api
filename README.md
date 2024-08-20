@@ -58,6 +58,29 @@ console.log(result)
   // > ["I did it fast", "I also did it fast"]
   ```
 
+  -- **`modules`** `Array`
+  When decorating dynamics you can mark them as part of a module, you need to enable modules explicitly in the dynamic api.
+
+  ```js
+  import { Dynamic } from '@universal-packages/dynamic-api'
+
+  @Dynamic('sub-calculations', 'extra')
+  export default class CalculateDynamic {
+    async perform(payload) {
+      return 'I am an extra calculation'
+    }
+  }
+  ```
+
+  ```js
+  const dynamicApi = new DynamicApi({ modules: [{ name: 'sub-calculations', enabled: true }] })
+  const result = await dynamicApi.performDynamic('extra')
+
+  console.log(result)
+
+  // > 'I am an extra calculation'
+  ```
+
 ### Instance methods
 
 #### **`performDynamic(name: string, payload: Object)`**
@@ -70,7 +93,10 @@ To not waste overhead in async calls perform dynamics synchronically, they of co
 
 ## Decorators
 
-#### **`@Dynamic(name: string, [default: boolean])`**
+### @Dynamic
+
+`@Dynamic(name: string, [default: boolean])`
+`@Dynamic(module: string, name: string, [default: boolean])`
 
 Dynamics are classes as a default export, decorated with `@Dynamic` decorator and implementing the method `perform`.
 
@@ -121,6 +147,19 @@ export default class CalculateDynamic {
     } else {
       return 'I was slow'
     }
+  }
+}
+```
+
+You can make a dynamic part of a module by providing a module name as the first argument.
+
+```js
+import { Dynamic } from '@universal-packages/dynamic-api'
+
+@Dynamic('sub-calculations', 'extra')
+export default class CalculateDynamic {
+  async perform(payload) {
+    return 'I am an extra calculation'
   }
 }
 ```

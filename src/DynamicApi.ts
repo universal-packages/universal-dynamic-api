@@ -11,7 +11,7 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
 
   public constructor(options: DynamicApiOptions) {
     super()
-    this.options = { debug: process.env['NODE_ENV'] === 'test', dynamicsLocation: './src', ...options }
+    this.options = { debug: process.env['NODE_ENV'] === 'test', dynamicsLocation: './src', modules: [], ...options }
 
     if (this.options.debug && process.env['NODE_ENV'] !== 'test' && process.env['NODE_ENV'] !== 'development') {
       const message = `dynamic api (${this.options.apiName || this.constructor.name || 'unnamed'}) debug mode is enabled`
@@ -39,12 +39,29 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
     for (let i = 0; i < finalModules.length; i++) {
       const currentModule = finalModules[i]
       const DynamicClass: DynamicClassLike = currentModule.exports
+      let moduleOptions = {}
 
       if (DynamicClass) {
+        if (DynamicClass.__module) {
+          const dynamicModuleEntry = this.options.modules.find((module) => module.name === DynamicClass.__module)
+
+          // Skip if module is not enabled
+          if (!dynamicModuleEntry) continue
+          if (dynamicModuleEntry.enabled !== true) continue
+
+          moduleOptions = dynamicModuleEntry.options || {}
+        }
+
         if (DynamicClass.__name) {
           DynamicClass.__api = this.constructor as typeof DynamicApi
 
-          const dynamicEntry: DynamicRegistry = this.dynamics[DynamicClass.__name] || { afterHooks: [], beforeHooks: [], implementations: [], name: DynamicClass.__name }
+          const dynamicEntry: DynamicRegistry = this.dynamics[DynamicClass.__name] || {
+            afterHooks: [],
+            beforeHooks: [],
+            implementations: [],
+            name: DynamicClass.__name,
+            moduleOptions
+          }
 
           if (DynamicClass.__defaultDynamic) {
             if (!dynamicEntry.default) dynamicEntry.default = DynamicClass
@@ -85,22 +102,22 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
       //////// Debug
       if (this.options.debug) debugEntry.hooks.before.push(dynamicEntry.beforeHooks[i])
 
-      await this.perform(dynamicEntry.beforeHooks[i], payload)
+      await this.perform(dynamicEntry.beforeHooks[i], payload, dynamicEntry.moduleOptions)
     }
 
     if (this.options.accumulate) {
-      if (dynamicEntry.default) results.push(await this.perform(dynamicEntry.default, payload))
+      if (dynamicEntry.default) results.push(await this.perform(dynamicEntry.default, payload, dynamicEntry.moduleOptions))
 
       for (let i = 0; i < dynamicEntry.implementations.length; i++) {
         const CurrentImplementation = dynamicEntry.implementations[i]
 
-        results.push(await this.perform(CurrentImplementation, payload))
+        results.push(await this.perform(CurrentImplementation, payload, dynamicEntry.moduleOptions))
       }
     } else {
       if (dynamicEntry.implementations[0]) {
-        results.push(await this.perform(dynamicEntry.implementations[0], payload))
+        results.push(await this.perform(dynamicEntry.implementations[0], payload, dynamicEntry.moduleOptions))
       } else if (dynamicEntry.default) {
-        results.push(await this.perform(dynamicEntry.default, payload))
+        results.push(await this.perform(dynamicEntry.default, payload, dynamicEntry.moduleOptions))
       } else {
         throw new Error(`"${name as string}" does not implement dynamics only hooks`)
       }
@@ -114,7 +131,7 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
       //////// Debug
       if (this.options.debug) debugEntry.hooks.after.push(dynamicEntry.afterHooks[i])
 
-      await this.perform(dynamicEntry.afterHooks[i], payload, true, this.options.accumulate ? results : results[0])
+      await this.perform(dynamicEntry.afterHooks[i], payload, dynamicEntry.moduleOptions, this.options.accumulate ? results : results[0])
     }
 
     if (this.options.debug) this.constructor['debugLog'].push(debugEntry)
@@ -126,11 +143,11 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
     }
   }
 
-  private async perform(DynamicClass: DynamicClassLike, payload: Record<string, any>, shareResult = false, result?: any): Promise<any> {
-    const instance = new DynamicClass()
+  private async perform(DynamicClass: DynamicClassLike, payload: Record<string, any>, options: Record<string, any>, result?: any): Promise<any> {
+    const instance = new DynamicClass(options)
 
     if (instance.perform) {
-      if (shareResult) {
+      if (result) {
         return await instance.perform(payload, result, this)
       } else {
         return await instance.perform(payload, this)
@@ -152,22 +169,22 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
       //////// Debug
       if (this.options.debug) debugEntry.hooks.before.push(dynamicEntry.beforeHooks[i])
 
-      this.performSync(dynamicEntry.beforeHooks[i], payload)
+      this.performSync(dynamicEntry.beforeHooks[i], payload, dynamicEntry.moduleOptions)
     }
 
     if (this.options.accumulate) {
-      if (dynamicEntry.default) results.push(this.performSync(dynamicEntry.default, payload))
+      if (dynamicEntry.default) results.push(this.performSync(dynamicEntry.default, payload, dynamicEntry.moduleOptions))
 
       for (let i = 0; i < dynamicEntry.implementations.length; i++) {
         const CurrentImplementation = dynamicEntry.implementations[i]
 
-        results.push(this.performSync(CurrentImplementation, payload))
+        results.push(this.performSync(CurrentImplementation, payload, dynamicEntry.moduleOptions))
       }
     } else {
       if (dynamicEntry.implementations[0]) {
-        results.push(this.performSync(dynamicEntry.implementations[0], payload))
+        results.push(this.performSync(dynamicEntry.implementations[0], payload, dynamicEntry.moduleOptions))
       } else if (dynamicEntry.default) {
-        results.push(this.performSync(dynamicEntry.default, payload))
+        results.push(this.performSync(dynamicEntry.default, payload, dynamicEntry.moduleOptions))
       } else {
         throw new Error(`"${name as string}" does not implement dynamics only hooks`)
       }
@@ -181,7 +198,7 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
       //////// Debug
       if (this.options.debug) debugEntry.hooks.after.push(dynamicEntry.afterHooks[i])
 
-      this.performSync(dynamicEntry.afterHooks[i], payload, true, this.options.accumulate ? results : results[0])
+      this.performSync(dynamicEntry.afterHooks[i], payload, dynamicEntry.moduleOptions, this.options.accumulate ? results : results[0])
     }
 
     if (this.options.debug) this.constructor['debugLog'].push(debugEntry)
@@ -193,11 +210,11 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
     }
   }
 
-  private performSync(DynamicClass: DynamicClassLike, payload: Record<string, any>, shareResult = false, result?: any): any {
-    const instance = new DynamicClass()
+  private performSync(DynamicClass: DynamicClassLike, payload: Record<string, any>, options: Record<string, any>, result?: any): any {
+    const instance = new DynamicClass(options)
 
     if (instance.perform) {
-      if (shareResult) {
+      if (result) {
         return instance.perform(payload, result, this)
       } else {
         return instance.perform(payload, this)

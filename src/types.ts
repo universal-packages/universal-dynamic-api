@@ -8,7 +8,14 @@ export interface DynamicApiOptions {
   accumulate?: boolean
   debug?: boolean
   dynamicsLocation: string
+  modules?: DynamicModule[]
   namespace?: string
+}
+
+export interface DynamicModule {
+  name: string
+  enabled: boolean
+  options?: Record<string, any>
 }
 
 export interface DynamicRegistry {
@@ -17,6 +24,7 @@ export interface DynamicRegistry {
   default?: DynamicClassLike
   implementations: DynamicClassLike[]
   name: string
+  moduleOptions: Record<string, any>
 }
 
 export interface Dynamics {
@@ -28,6 +36,7 @@ export interface DynamicLike {
 }
 
 export interface DynamicClassLike {
+  __module: string
   __name: string
   __defaultDynamic: boolean
   __lifeCycle: DynamicHookPosition
