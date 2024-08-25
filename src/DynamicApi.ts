@@ -106,7 +106,7 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
     }
 
     if (this.options.accumulate) {
-      if (dynamicEntry.default) results.push(await this.perform(dynamicEntry.default, payload, dynamicEntry.moduleOptions))
+      if (dynamicEntry.default && !dynamicEntry.implementations.length) results.push(await this.perform(dynamicEntry.default, payload, dynamicEntry.moduleOptions))
 
       for (let i = 0; i < dynamicEntry.implementations.length; i++) {
         const CurrentImplementation = dynamicEntry.implementations[i]
@@ -173,7 +173,7 @@ export default class DynamicApi<D extends Record<string, any>> extends EventEmit
     }
 
     if (this.options.accumulate) {
-      if (dynamicEntry.default) results.push(this.performSync(dynamicEntry.default, payload, dynamicEntry.moduleOptions))
+      if (dynamicEntry.default && !dynamicEntry.implementations.length) results.push(this.performSync(dynamicEntry.default, payload, dynamicEntry.moduleOptions))
 
       for (let i = 0; i < dynamicEntry.implementations.length; i++) {
         const CurrentImplementation = dynamicEntry.implementations[i]
