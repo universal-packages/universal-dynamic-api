@@ -16,14 +16,14 @@
     "update-universal-dependencies": "umaintenance update-universal-dependencies"
   },
   "dependencies": {
-    "@universal-packages/event-emitter": "^1.1.6",
-    "@universal-packages/module-loader": "^1.0.12"
+    "@universal-packages/event-emitter": "^1.2.0",
+    "@universal-packages/module-loader": "^1.1.0"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^18.11.9",
-    "@universal-packages/maintenance": "^1.6.12",
+    "@universal-packages/maintenance": "^1.7.0",
     "jest": "^29.7.0",
     "prettier": "^3.4.1",
     "ts-jest": "^29.2.5",
